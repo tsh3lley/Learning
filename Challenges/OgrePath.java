@@ -24,13 +24,15 @@ public class OgrePath {
             {0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,1,1,0,0,0},
             {0,0,0,0,0,0,0,0,0,3}};
-    static Point goal = new Point();
-    static Point temp = new Point();
     static ArrayList<Point> sink = new ArrayList<Point>();
 	static ArrayList<Point> ogre = new ArrayList<Point>();
 	static ArrayList<Point> blank = new ArrayList<Point>();
-	
-    
+	static ArrayList<Point> pivot = new ArrayList<Point>();
+	static Point goal = new Point();
+	static Point topLeft;
+	static Point topRight;
+	static Point bottomLeft;
+	static Point bottomRight;
     
 	public static void main(String[] args) {
 		OgrePath OP = new OgrePath();
@@ -41,34 +43,40 @@ public class OgrePath {
 	}
 	
 	public static void points(int[][] maze, OgrePath OP){
-		
-		
+		Point o = new Point();
+		Point s = new Point();
+		Point b = new Point();
 		for (int i=0;i<maze.length;i++){
 			for (int j=0;j<maze[i].length;j++){
 				if (maze[i][j] == 3){
-					OP.goal.x = i; 
-					OP.goal.y = j;
+					OP.goal.x = j; 
+					OP.goal.y = i;
 				} else if (maze[i][j] == 2){
-					OP.temp.x = i;
-					OP.temp.y = j;
-					ogre.add(temp);
+					o.x = j;
+					o.y = i;
+					ogre.add(o);
 				} else if (maze[i][j] == 1){
-					OP.temp.x = i;
-					OP.temp.y = j;
-					sink.add(temp);
+					s.x = j;
+					s.y = i;
+					sink.add(s);
 				} else if (maze[i][j] == 0){
-					OP.temp.x = i;
-					OP.temp.y = j;
-					blank.add(temp);
+					b.x = j;
+					b.y = i;
+					blank.add(b);
 				}
 			}
-		
 		}
-
+		
+		topLeft = ogre.get(0);
+		topRight= ogre.get(1);
+		bottomLeft= ogre.get(2);
+		bottomRight= ogre.get(3);
 	}
 	
 	public static void path(OgrePath OP){
-		System.out.println(OP.goal.x);
-		System.out.println(OP.goal.y);
+		System.out.println(topLeft.x);
+		System.out.println(bottomLeft.x);
+		System.out.println(ogre.get(0).x);
+		System.out.println(ogre.get(0).y);
 	}
 }
