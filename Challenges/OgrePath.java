@@ -1,3 +1,4 @@
+package Recursion;
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -77,7 +78,7 @@ public class OgrePath {
 		//topleft 2^3 topright 2^2 bottomleft 2^1 bottomright 2^0
 		int directions = 0;
 		for (int i=0;i<4;i++){
-			ogre.get(i)
+			ogre.get(i);
 		}
 		
 		
