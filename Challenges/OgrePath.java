@@ -66,7 +66,6 @@ public class OgrePath {
 				}
 			}
 		}
-		
 		topLeft = ogre.get(0);
 		topRight= ogre.get(1);
 		bottomLeft= ogre.get(2);
@@ -74,9 +73,56 @@ public class OgrePath {
 	}
 	
 	public static void path(OgrePath OP){
-		System.out.println(topLeft.x);
-		System.out.println(bottomLeft.x);
-		System.out.println(ogre.get(0).x);
-		System.out.println(ogre.get(0).y);
+		//bitwise boolean flag integer "directions"
+		//topleft 2^3 topright 2^2 bottomleft 2^1 bottomright 2^0
+		int directions = 0;
+		for (int i=0;i<4;i++){
+			ogre.get(i)
+		}
+		
+		
+	}
+	
+	public boolean valid(int[][] maze, Point p){
+		if (inMaze(maze,p) && notSink(maze,p)) return true;
+		else return false;
+	}
+	
+	public boolean inMaze(int[][] maze, Point p){
+		if (p.x < (maze[0].length - 1) && p.x > -1 && p.y < (maze.length - 1) && p.y > -1){
+			return true;
+		} else return false;
+	}
+	
+	public boolean notSink(int[][] maze, Point p){
+		if (maze[p.x][p.y] != 1) return true;
+		else return false;	
+	}
+	
+	public static int[][] move(int[][] maze, String direction){
+		for (int i=0;i<4;i++){
+			maze[ogre.get(i).x][ogre.get(i).y] = 4;
+		}
+		if (direction == "left"){
+			for (int i=0;i<4;i++){
+				ogre.get(i).x = ogre.get(i).x - 1;
+			}
+		}else if (direction == "right"){
+			for (int i=0;i<4;i++){
+				ogre.get(i).x = ogre.get(i).x + 1;
+			}
+		}else if (direction == "down"){
+			for (int i=0;i<4;i++){
+				ogre.get(i).y = ogre.get(i).y - 1;
+			}
+		}else if (direction == "up"){
+			for (int i=0;i<4;i++){
+				ogre.get(i).y = ogre.get(i).y - 1;
+			}
+		}
+		for (int i=0;i<4;i++){
+			maze[ogre.get(i).x][ogre.get(i).y] = 2;
+		}
+		return maze;
 	}
 }
