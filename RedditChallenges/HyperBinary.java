@@ -1,69 +1,41 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 public class HyperBinary {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
+		//1101
 		//1021
 		//221
-		//1101
-		int num = Integer.parseInt(toBinary(13));
-		System.out.println(numSolutions(num));
+		System.out.println(toList(13));
 	}
 
-	public static ArrayList<Integer> solve(int n){
-		ArrayList<Integer> solutions = new ArrayList<Integer>();
-		int num = Integer.parseInt(toBinary(n));
+	public static LinkedList<Integer> solve(int n){
+		LinkedList<Integer> solutions = new LinkedList<Integer>();
 		
-		int length = (int) Math.log10(num);
-
-		while (num>=1){
-			if (num % 10 != 0){
-				numOnes++;
-			}
-			num = num / 10;
-		}
-		
-		if (binary % 10 != 0){
-			numOnes = numOnes - 1; 
-		}
-		
-		//plus one for binary solution
-		return numOnes + 1;
-		
-		
-		
-		
-		
-		
-		
-		return solutions;
+		return null;
 	}
 	
-	
-	public static String toBinary(int n){
+	public static LinkedList<Integer> toList(int n){
+		//lmao
+		LinkedList<Integer> ans = new LinkedList<Integer>();
+		char[] pls = Integer.toBinaryString(n).toCharArray();
+		for (int i=0;i<pls.length;i++){
+			ans.add((int) pls[i] - 48);
+		}
 		
-		return Integer.toBinaryString(n);
+		return ans;
 	}
 	
-	public static int numSolutions(int binary){
-		int numOnes = 0;
-		int num = binary;
-		int length = (int) Math.log10(binary);
-
-		while (num>=1){
-			if (num % 10 != 0){
-				numOnes++;
-			}
-			num = num / 10;
+	public static LinkedList<Integer> hyperize(LinkedList<Integer> list, int index){
+		if (list.get(index + 1) == 0 && list.get(index) == 1){
+			list.get(index + 1) = 2;
+			list.get(index) = 0;
+			list.
+			//close but need a method to do this
 		}
-		
-		if (binary % 10 != 0){
-			numOnes = numOnes - 1; 
-		}
-		
-		//plus one for binary solution
-		return numOnes + 1;
 	}
 }
