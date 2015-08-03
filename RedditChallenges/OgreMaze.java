@@ -75,27 +75,37 @@ public class OgrePath {
 	public static void path(OgrePath OP){
 		//bitwise boolean flag integer "directions"
 		//topleft 2^3 topright 2^2 bottomleft 2^1 bottomright 2^0
+		String[] moves = {"left","right","down","up"};
 		int directions = 0;
-		for (int i=0;i<4;i++){
-			ogre.get(i)
+		for (int j=0;j<moves.length;j++){
+			for (int i=0;i<4;i++){
+				move(maze,moves[j]);
+				if (valid(maze, ogre.get(i))){
+					
+				}
+			}
 		}
-		
 		
 	}
 	
-	public boolean valid(int[][] maze, Point p){
-		if (inMaze(maze,p) && notSink(maze,p)) return true;
+	public static boolean valid(int[][] maze, Point p){
+		if (inMaze(maze,p) && notSink(maze,p) && notBeen(maze,p)) return true;
 		else return false;
 	}
 	
-	public boolean inMaze(int[][] maze, Point p){
+	public static boolean inMaze(int[][] maze, Point p){
 		if (p.x < (maze[0].length - 1) && p.x > -1 && p.y < (maze.length - 1) && p.y > -1){
 			return true;
 		} else return false;
 	}
 	
-	public boolean notSink(int[][] maze, Point p){
+	public static boolean notSink(int[][] maze, Point p){
 		if (maze[p.x][p.y] != 1) return true;
+		else return false;	
+	}
+	
+	public static boolean notBeen(int[][] maze, Point p){
+		if (maze[p.x][p.y] != 4) return true;
 		else return false;	
 	}
 	
