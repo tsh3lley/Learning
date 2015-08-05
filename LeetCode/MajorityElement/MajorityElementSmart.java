@@ -1,42 +1,19 @@
 
-public class Solution {
+public class MajorityElementSmart {
 	public int[] array;
 	public int[] temp;
 	public int length;
 	
 	public static void main(String[] args) {
-		int[] input = new int[] {3,3,4};
+		int[] input = new int[] {3,3,4,4,4};
 		System.out.print(majorityElement(input));
 	}
 	
     public static int majorityElement(int[] nums) {
     	if (nums.length == 1) return nums[0];
-    	Solution s = new Solution();
+    	MajorityElementSmart s = new MajorityElementSmart();
         s.sort(nums);
-        int halfN = (nums.length / 2) + 1;
-        int currentElement = s.array[0];
-        int majorityElement = s.array[0];
-        int counter = 0;
-        int majority = 0;
-        
-        for (int i=0;i<nums.length;i++){
-        	if (s.array[i] == currentElement){
-        		counter++;
-        		if (counter > majority){
-        			majority = counter;
-        			majorityElement = currentElement;
-        		}
-        	} else {
-        		if (counter > majority){
-        			majority = counter;
-        			majorityElement = currentElement;
-        		}
-        		counter = 1;
-        		currentElement = s.array[i];	
-        	}
-        
-        }
-        return majorityElement;
+        return s.array[s.array.length / 2];
     }
 	
 	public  void sort(int[] input){
