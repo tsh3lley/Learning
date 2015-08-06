@@ -13,21 +13,35 @@ public class OgrePath {
 //	 ..........
 //	 .....OO...
 //	 .........$
+
+//trying with 1x1 ogre to learn DFS
+//	 @O........
+//	 ..O.......
+//	 O....O.O..
+//	 ..........
+//	 ..O.O.....
+//	 ..O....O.O
+//	 OO........
+//	 ..........
+//	 .....OO...
+//	 .....O...$
+	
     static int[][] maze = { 
-    		{2,2,0,0,0,0,0,0,0,0},
-            {2,2,1,0,0,0,0,0,0,0},
-            {0,0,0,0,0,1,0,1,0,0},
+    		{2,1,0,0,0,0,0,0,0,0},
+            {0,0,1,0,0,0,0,0,0,0},
+            {1,0,0,0,0,1,0,1,0,0},
             {0,0,0,0,0,0,0,0,0,0},
             {0,0,1,1,0,0,0,0,0,0},
             {0,0,1,0,0,0,0,1,0,1},
-            {0,1,0,0,0,0,0,0,0,0},
+            {1,1,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,1,1,0,0,0},
-            {0,0,0,0,0,0,0,0,0,3}};
+            {0,0,0,0,0,1,0,0,0,3}};
+    public static boolean[][] visited = new boolean[maze.length][maze[0].length];
     static ArrayList<Point> sink = new ArrayList<Point>();
 	static ArrayList<Point> ogre = new ArrayList<Point>();
 	static ArrayList<Point> blank = new ArrayList<Point>();
-	static ArrayList<Point> pivot = new ArrayList<Point>();
+	static ArrayList<Point> neighbors = new ArrayList<Point>();
 	static Point goal = new Point();
 	static Point topLeft;
 	static Point topRight;
@@ -36,60 +50,58 @@ public class OgrePath {
     
 	public static void main(String[] args) {
 		OgrePath OP = new OgrePath();
-		points(maze, OP);
-		path(OP);
-		
-
-	}
-	
-	public static void points(int[][] maze, OgrePath OP){
-		Point o = new Point();
-		Point s = new Point();
-		Point b = new Point();
 		for (int i=0;i<maze.length;i++){
 			for (int j=0;j<maze[i].length;j++){
-				if (maze[i][j] == 3){
-					OP.goal.x = j; 
-					OP.goal.y = i;
-				} else if (maze[i][j] == 2){
-					o.x = j;
-					o.y = i;
-					ogre.add(o);
-				} else if (maze[i][j] == 1){
-					s.x = j;
-					s.y = i;
-					sink.add(s);
-				} else if (maze[i][j] == 0){
-					b.x = j;
-					b.y = i;
-					blank.add(b);
-				}
+				visited[j][i] = false;
 			}
 		}
-		topLeft = ogre.get(0);
-		topRight= ogre.get(1);
-		bottomLeft= ogre.get(2);
-		bottomRight= ogre.get(3);
+		visited[getOgre(maze).x][getOgre(maze).y] = true;
+		System.out.println("Ogre: " + ogre);
+		dfs(maze, getOgre(maze));
+		
 	}
 	
-	public static void path(OgrePath OP){
-		//bitwise boolean flag integer "directions"
-		//topleft 2^3 topright 2^2 bottomleft 2^1 bottomright 2^0
-		String[] moves = {"left","right","down","up"};
-		int directions = 0;
-		for (int j=0;j<moves.length;j++){
-			for (int i=0;i<4;i++){
-				move(maze,moves[j]);
-				if (valid(maze, ogre.get(i))){
-					
-				}
-			}
+	public static boolean dfs(int[][] maze, Point p){
+		neighbors = getNeighbors(maze,p);
+		if (maze[p.x][p.y] == 3){
+			System.out.println("FOUND IT");
+			return true;
 		}
-		
+		if (neighbors.isEmpty()){
+			return false;
+		}
+		for (int i=0;i<neighbors.size();i++){
+			System.out.println("Nieghbors: " + neighbors);
+			System.out.println(i + "(" + p.x + "," + p.y + ")");
+			visited[neighbors.get(i).x][neighbors.get(i).y] = true;
+			dfs(maze, neighbors.get(i));
+		}
+		return false;
+	}
+	
+	public static ArrayList<Point> getNeighbors(int[][] maze, Point p){
+		ArrayList<Point> neighbors = new ArrayList<Point>();
+		Point left = new Point();
+		Point right = new Point();
+		Point down = new Point();
+		Point up = new Point();
+		down.x = p.x - 1;
+		down.y = p.y;
+		if (valid(maze,down)) neighbors.add(down);
+		up.x = p.x + 1;
+		up.y = p.y;
+		if (valid(maze,up)) neighbors.add(up);
+		left.x = p.x;
+		left.y = p.y - 1;
+		if (valid(maze,left)) neighbors.add(left);
+		right.x = p.x;
+		right.y = p.y + 1;
+		if (valid(maze,right)) neighbors.add(right);
+		return neighbors;
 	}
 	
 	public static boolean valid(int[][] maze, Point p){
-		if (inMaze(maze,p) && notSink(maze,p) && notBeen(maze,p)) return true;
+		if (inMaze(maze,p) && canGo(maze,p) && visited[p.x][p.y] == false) return true;
 		else return false;
 	}
 	
@@ -99,40 +111,21 @@ public class OgrePath {
 		} else return false;
 	}
 	
-	public static boolean notSink(int[][] maze, Point p){
-		if (maze[p.x][p.y] != 1) return true;
+	public static boolean canGo(int[][] maze, Point p){
+		if (maze[p.x][p.y] != 1 && maze[p.x][p.y] != 4) return true;
 		else return false;	
 	}
 	
-	public static boolean notBeen(int[][] maze, Point p){
-		if (maze[p.x][p.y] != 4) return true;
-		else return false;	
-	}
-	
-	public static int[][] move(int[][] maze, String direction){
-		for (int i=0;i<4;i++){
-			maze[ogre.get(i).x][ogre.get(i).y] = 4;
-		}
-		if (direction == "left"){
-			for (int i=0;i<4;i++){
-				ogre.get(i).x = ogre.get(i).x - 1;
-			}
-		}else if (direction == "right"){
-			for (int i=0;i<4;i++){
-				ogre.get(i).x = ogre.get(i).x + 1;
-			}
-		}else if (direction == "down"){
-			for (int i=0;i<4;i++){
-				ogre.get(i).y = ogre.get(i).y - 1;
-			}
-		}else if (direction == "up"){
-			for (int i=0;i<4;i++){
-				ogre.get(i).y = ogre.get(i).y - 1;
+	public static Point getOgre(int[][] maze){
+		Point ogre = new Point();
+		for (int i=0;i<maze.length;i++){
+			for (int j=0;j<maze[i].length;j++){
+				if (maze[i][j] == 2){
+					ogre.x = j;
+					ogre.y = i;
+				}
 			}
 		}
-		for (int i=0;i<4;i++){
-			maze[ogre.get(i).x][ogre.get(i).y] = 2;
-		}
-		return maze;
+		return ogre;
 	}
 }
