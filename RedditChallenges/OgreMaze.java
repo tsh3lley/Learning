@@ -38,15 +38,6 @@ public class OgrePath {
             {0,0,0,0,0,1,1,0,0,0},
             {0,0,0,0,0,1,0,0,0,3}};
     public static boolean[][] visited = new boolean[maze.length][maze[0].length];
-    static ArrayList<Point> sink = new ArrayList<Point>();
-	static ArrayList<Point> ogre = new ArrayList<Point>();
-	static ArrayList<Point> blank = new ArrayList<Point>();
-	static ArrayList<Point> neighbors = new ArrayList<Point>();
-	static Point goal = new Point();
-	static Point topLeft;
-	static Point topRight;
-	static Point bottomLeft;
-	static Point bottomRight;
     
 	public static void main(String[] args) {
 		OgrePath OP = new OgrePath();
@@ -56,12 +47,13 @@ public class OgrePath {
 			}
 		}
 		visited[getOgre(maze).x][getOgre(maze).y] = true;
-		System.out.println("Ogre: " + ogre);
+		System.out.println("Ogre: " + getOgre(maze));
 		dfs(maze, getOgre(maze));
 		
 	}
 	
 	public static boolean dfs(int[][] maze, Point p){
+		ArrayList<Point> neighbors = new ArrayList<Point>();
 		neighbors = getNeighbors(maze,p);
 		if (maze[p.x][p.y] == 3){
 			System.out.println("FOUND IT");
@@ -74,7 +66,9 @@ public class OgrePath {
 			System.out.println("Nieghbors: " + neighbors);
 			System.out.println(i + "(" + p.x + "," + p.y + ")");
 			visited[neighbors.get(i).x][neighbors.get(i).y] = true;
-			dfs(maze, neighbors.get(i));
+			if(dfs(maze, neighbors.get(i))){
+			    return true;
+			}
 		}
 		return false;
 	}
@@ -106,7 +100,7 @@ public class OgrePath {
 	}
 	
 	public static boolean inMaze(int[][] maze, Point p){
-		if (p.x < (maze[0].length - 1) && p.x > -1 && p.y < (maze.length - 1) && p.y > -1){
+		if (p.x < (maze[0].length) && p.x > -1 && p.y < (maze.length) && p.y > -1){
 			return true;
 		} else return false;
 	}
