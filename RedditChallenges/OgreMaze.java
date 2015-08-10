@@ -1,20 +1,8 @@
 import java.awt.Point;
 import java.util.ArrayList;
 
-
 public class OgrePath {
-//	 @@........
-//	 @@O.......
-//	 .....O.O..
-//	 ..........
-//	 ..O.O.....
-//	 ..O....O.O
-//	 .O........
-//	 ..........
-//	 .....OO...
-//	 .........$
-
-//trying with 1x1 ogre to learn DFS
+//get ogre(@ or 2) to the finish ($ or 3)
 //	 @O........
 //	 ..O.......
 //	 O....O.O..
@@ -38,9 +26,9 @@ public class OgrePath {
             {0,0,0,0,0,1,1,0,0,0},
             {0,0,0,0,0,1,0,0,0,3}};
     public static boolean[][] visited = new boolean[maze.length][maze[0].length];
+    public static ArrayList<Point> path = new ArrayList<Point>();
     
 	public static void main(String[] args) {
-		OgrePath OP = new OgrePath();
 		for (int i=0;i<maze.length;i++){
 			for (int j=0;j<maze[i].length;j++){
 				visited[j][i] = false;
@@ -49,6 +37,8 @@ public class OgrePath {
 		visited[getOgre(maze).x][getOgre(maze).y] = true;
 		System.out.println("Ogre: " + getOgre(maze));
 		dfs(maze, getOgre(maze));
+		print(maze);
+		print(showPath(maze,path));
 		
 	}
 	
@@ -56,7 +46,8 @@ public class OgrePath {
 		ArrayList<Point> neighbors = new ArrayList<Point>();
 		neighbors = getNeighbors(maze,p);
 		if (maze[p.x][p.y] == 3){
-			System.out.println("FOUND IT");
+			System.out.println("FOUND IT @:");
+			System.out.println("(" + p.x + "," + p.y + ")");
 			return true;
 		}
 		if (neighbors.isEmpty()){
@@ -67,6 +58,7 @@ public class OgrePath {
 			System.out.println(i + "(" + p.x + "," + p.y + ")");
 			visited[neighbors.get(i).x][neighbors.get(i).y] = true;
 			if(dfs(maze, neighbors.get(i))){
+				path.add(p);
 			    return true;
 			}
 		}
@@ -121,5 +113,21 @@ public class OgrePath {
 			}
 		}
 		return ogre;
+	}
+	
+	public static void print(int[][] maze){
+		for (int i=0;i<maze.length;i++){
+			System.out.println(" ");
+			for (int j=0;j<maze[i].length;j++){
+				System.out.print(maze[i][j]);
+			}
+		}
+	}
+	
+	public static int[][] showPath(int maze[][], ArrayList<Point> path){
+		for (int i=0;i<path.size();i++){
+			maze[path.get(i).x][path.get(i).y] = 4;
+		}
+		return maze;
 	}
 }
